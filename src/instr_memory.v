@@ -18,6 +18,16 @@
 
 
 module instr_memory(
-
+    output wire [31:0] instr,
+    input wire [31:0] addr
     );
+    
+    reg [31:0] mem [1023:0]; // 1024x32bit memory = 4kB
+    
+    // uncomment the lines of the following procedural block to read the program from a file
+    //initial
+    //  $readmemh("prog.hex", mem);
+    
+    assign instr = mem[addr[11:2]]; // combinational read, word aligned(2) only 2^10 lines (11)
+    
 endmodule
