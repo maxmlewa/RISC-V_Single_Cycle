@@ -5,9 +5,10 @@
 // Target Devices: XXXX
 // Description: Register File for RV321
 //              2 read ports and 1 write port
-//              Synchronous write and asynchronous reads
+//              Synchronous write on rising clock edge and asynchronous reads
+//              Asynchronous active HIGH reset
 // 
-// Dependencies: No defined modules instantiated
+// Dependencies: None, pure standalone
 // 
 // Revision:
 // Revision 0.01 - File Created

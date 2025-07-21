@@ -6,7 +6,7 @@
 // Description: Data Memory for the Single Cycle microarchitecture of the RV32I architecture
 //              Has added halfword and byte support 
 //              Synchronous writes and asynchronous reads
-// Dependencies: No defined module instantiated
+// Dependencies: None, pure combinational
 // 
 // Revision:
 // Revision 0.01 - File Created

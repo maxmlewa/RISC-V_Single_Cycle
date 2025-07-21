@@ -8,7 +8,7 @@
 //              Single read port that performs a combinational read 
 //              Not clocked, because the memory has no write port
 // 
-// Dependencies: 
+// Dependencies: None, pure standalone
 // 
 // Revision:
 // Revision 0.01 - File Created
