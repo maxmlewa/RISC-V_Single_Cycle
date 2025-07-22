@@ -17,13 +17,13 @@
 module pc(
     input wire clk, reset,
     input wire [31:0] pc_next,
-    output reg [31:0] pc
+    output reg [31:0] curr_pc
     );
     always @(posedge clk or posedge reset) // the PC reset is active HIGH and asynchronous
         begin
             if(reset)
-                pc <= 0;
+                curr_pc <= 0;
             else
-                pc <= pc_next;
+                curr_pc <= pc_next;
             end
 endmodule
