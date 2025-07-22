@@ -16,6 +16,42 @@
 
 
 module alu(
-
+    input wire [31:0] A,B,
+    input wire [6:0] funct7,
+    input wire [2:0] funct3,
+    input wire [1:0] alu_op,
+    output reg [31:0] C,
+    output wire zero // High if the result is zero,
+                    // support  branch decisions, borrowed from x86 ZF(Zero Flag)
     );
+    
+    // signal assignments
+    wire [4:0] shamt = B[4:0];
+    wire signed [31:0] A_s = A;
+    wire signed [31:0] B_s = B;
+    
+    // ALU component
+    always@*
+    begin
+        case(alu_op)
+            2'b00: C = A + B; // Supports the address manipulation: Load, Store, AUIPC
+            2'b01: C = A - B; // Support comparison for branch operations
+            2'b10: begin
+                    case(funct3)
+                        3'b000: C = (funct7[5]) ? (A - B) : (A + B);                // SUB, ADD
+                        3'b001: C = A << shamt;                                     // SLL, SLLI
+                        3'b010: C = (A_s < B_s) ? 1 : 0;                            // SLT, SLTI
+                        3'b011: C = (A < B) ? 1 : 0;                                // SLTU, SLTIU
+                        3'b100: C = A ^ B;                                          // XOR, XORI
+                        3'b101: C = (funct7[5]) ? (A_s >>> shamt):(A >>> shamt);    // SRA, SRAI ; SRL, SRLI
+                        3'b110: C = A | B;                                          // OR, ORI
+                        3'b111: C = A & B;                                          // AND, ANDI
+                        default: C = 32'bx;                                         // for uknown and floating signals
+                    endcase
+                   end
+            default: C = 32'bx;
+        endcase
+    end
+    
+    assign zero = (C == 32'b0);
 endmodule
