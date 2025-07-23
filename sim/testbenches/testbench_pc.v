@@ -7,7 +7,7 @@
 // Functionality Tested: Reset behavior: curr_pc must be 0 after reset
 //                       Sequential Updates: curr_pc must follow pc_next on each clock edge
 // 
-// Dependencies: pc.v - pc instantiated as the DUT
+// Dependencies: pc.v : pc instantiated as the DUT
 // 
 // Revision:
 // Revision 0.01 - File Created
