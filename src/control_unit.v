@@ -49,7 +49,7 @@ module control_unit(
                             alu_op = 2'b10;
                         end
 
-            7'b00000111: begin // Load
+            7'b0000011: begin // Load
                             // alu_op remains ADD for address calculation
                             alu_src = 1'b1;
                             mem_read = 1'b1;
