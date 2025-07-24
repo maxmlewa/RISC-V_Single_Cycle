@@ -25,14 +25,18 @@ module alu(
                     // support  branch decisions, borrowed from x86 ZF(Zero Flag)
     );
     
-    // signal assignments
+    // signal declarations
     wire [4:0] shamt = B[4:0];
     wire signed [31:0] A_s = A;
     wire signed [31:0] B_s = B;
     
+    // SRA to escape the mux errors
+    wire signed [31:0] SRA = A_s >>> shamt;
+    
     // ALU component
     always@*
     begin
+        // signal assignments
         case(alu_op)
             2'b00: C = A + B; // Supports the address manipulation: Load, Store, AUIPC
             2'b01: C = A - B; // Support comparison for branch operations
@@ -43,7 +47,7 @@ module alu(
                         3'b010: C = (A_s < B_s) ? 1 : 0;                            // SLT, SLTI
                         3'b011: C = (A < B) ? 1 : 0;                                // SLTU, SLTIU
                         3'b100: C = A ^ B;                                          // XOR, XORI
-                        3'b101: C = (funct7[5]) ? (A_s >>> shamt):(A >>> shamt);    // SRA, SRAI ; SRL, SRLI
+                        3'b101: C = (funct7[5]) ? SRA :(A >> shamt);     // SRA, SRAI ; SRL, SRLI
                         3'b110: C = A | B;                                          // OR, ORI
                         3'b111: C = A & B;                                          // AND, ANDI
                         default: C = 32'bx;                                         // for uknown and floating signals
