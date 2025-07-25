@@ -24,9 +24,10 @@ module instr_memory(
     
     reg [31:0] mem [1023:0]; // 1024x32bit memory = 4kB
     
+    // Use for simulation, refer to using .coe and BRAM for synthesis, or initial procedural block
     // uncomment the lines of the following procedural block to read the program from a file
-    //initial
-    //  $readmemh("prog.hex", mem);
+    initial
+      $readmemh("program.mem", mem);
     
     assign instr = mem[addr[11:2]]; // combinational read, word aligned(2) only 2^10 lines (11)
     
