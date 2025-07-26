@@ -25,7 +25,7 @@
 
 module rv32I_top(
     input wire clk, reset,
-    input [3:0] io_in,
+    input [3:0] io_in, // for future expansion and environment interaction
     output [7:0] debug_output
     );
     
@@ -49,7 +49,7 @@ module rv32I_top(
     // Internal wires connecting modules
     wire [31:0] rd1, rd2, imm, alu_b, alu_out, mem_rdata, reg_wdata;
     wire [1:0] alu_op;
-    wire branch, mem_read, mem_to_reg, mem_write, alu_src, reg_write;
+    wire branch, mem_read, mem_to_reg, mem_write, alu_src, reg_write, auipc;
     wire jal, jalr, lui, zero, take_branch;
         
     
@@ -64,8 +64,8 @@ module rv32I_top(
     );
     
     instr_memory IMEM(
-        .instr(curr_pc),
-        .addr(instr) 
+        .instr(instr),
+        .addr(curr_pc) 
     );
     
     control_unit CONTROL_UNIT(
@@ -80,7 +80,8 @@ module rv32I_top(
         .reg_write(reg_write), 
         .jal(jal), 
         .jalr(jalr), 
-        .lui(lui)  
+        .lui(lui),
+        .auipc(auipc)  
     );
     
     imm_gen IMM_UNIT(
@@ -123,14 +124,22 @@ module rv32I_top(
     // alu operand selection mux
     assign alu_b = (alu_src)? imm : rd2;
     
+    // write-back selection
+    assign reg_wdata = (lui)        ? imm :
+                       (auipc)      ? (curr_pc + imm) :
+                       (jal | jalr) ? (curr_pc + 4) :
+                       (mem_to_reg) ? mem_rdata :
+                                      alu_out;
+    
     // logic for branch and jump target operations
-    assign take_branch = branch & zero;
+    assign take_branch = branch & (alu_out == 32'b1);
+    
     assign pc_next = (jalr)        ? ((rd1 + imm) & ~32'd1) :
                      (jal)         ? (curr_pc + imm) :
                      (take_branch) ? (curr_pc + imm) :
                                      (curr_pc + 4);
                                      
     // debug output 
-    assign debug_out = rd1[7:0]; // Displaying the rd1 register value on LED for example
+    assign debug_output = pc_next[7:0]; // Displaying the rd1 register value on LED for example
     
 endmodule

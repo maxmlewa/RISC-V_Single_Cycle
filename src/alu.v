@@ -33,16 +33,31 @@ module alu(
     // SRA to escape the mux errors
     wire signed [31:0] SRA = A_s >>> shamt;
     
+
+    
+    
     // ALU component
     always@*
     begin
         // signal assignments
         case(alu_op)
             2'b00: C = A + B; // Supports the address manipulation: Load, Store, AUIPC
-            2'b01: C = A - B; // Support comparison for branch operations
+            2'b01: begin
+                    // Branch comparison logic; currently makes use of the zero flag
+                    // will be minimised in later developments
+                    case(funct3)
+                        3'b000: C = (A == B);
+                        3'b001: C = (A != B);
+                        3'b100: C = (A_s < B_s);
+                        3'b101: C = (A_s >= B_s);
+                        3'b110: C = (A < B); // unsigned
+                        3'b111: C = (A >= B); // unsigned
+                        default: C = 32'bx;    
+                    endcase
+                   end
             2'b10: begin
                     case(funct3)
-                        3'b000: C = (funct7[5]) ? (A - B) : (A + B);                // SUB, ADD
+                        3'b000: C = (funct7[5]) ? (A_s - B_s) : (A_s + B_s);                // SUB, ADD
                         3'b001: C = A << shamt;                                     // SLL, SLLI
                         3'b010: C = (A_s < B_s) ? 1 : 0;                            // SLT, SLTI
                         3'b011: C = (A < B) ? 1 : 0;                                // SLTU, SLTIU

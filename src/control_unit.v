@@ -20,7 +20,7 @@ module control_unit(
     input wire [6:0] opcode,
     input wire [2:0] funct3, // left for future expansion
     output reg [1:0] alu_op,
-    output reg branch, mem_read, mem_to_reg, mem_write, alu_src, reg_write, jal, jalr, lui
+    output reg branch, mem_read, mem_to_reg, mem_write, alu_src, reg_write, jal, jalr, lui, auipc
     );
     
     always@*
@@ -35,6 +35,7 @@ module control_unit(
         jalr = 1'b0;        // High for JALR
         lui = 1'b0;         // High for LUI
         alu_op = 2'b00;     // 2 bit alu operation selector: 00: ADD, 01: SUB, 10: R-Type and I-Type
+        auipc = 1'b0;       // added to support the auipc instruction
         
         case(opcode)
             7'b0110011: begin // R type
@@ -64,7 +65,7 @@ module control_unit(
                         
             7'b1100011: begin // Branch
                             branch = 1'b1;
-                            alu_op = 2'b01; // SUB for comparison
+                            alu_op = 2'b01; // for comparison
                         end 
                         
             7'b1101111: begin // JAL
@@ -86,6 +87,7 @@ module control_unit(
             7'b0010111: begin // AUIPC
                             reg_write = 1'b1;
                             alu_src = 1'b1;
+                            auipc = 1'b1;
                         end
                  
             default : begin
