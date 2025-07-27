@@ -119,4 +119,5 @@ Maxwell Mlewa
 - [Xilinx Vivado](https://www.amd.com/en/products/software/adaptive-socs-and-fpgas/vivado.html) - for enabling FPGA development, simulation and sysnthesis
 - [Basys 3 Board](https://digilent.com/reference/programmable-logic/basys-3/start?srsltid=AfmBOorltsrvuxpcMiQ5CMp9w_vQZtCauOOFsvAuoSpoNS0v0GisPOxF) - the gateway to the Xilinx Vivado development suite
 - [Luplab RISC-V Instruction Encoder/Decoder](https://luplab.gitlab.io/rvcodecjs/#q=bne+x1,+x2,+8&abi=false&isa=AUTO) - RISC-V RV32I decoder
-- [Cornell RISC-V Interpreter](https://www.cs.cornell.edu/courses/cs3410/2019sp/riscv/interpreter/) - for rnabling manual verification through observing the architectural state
+- [Cornell RISC-V Interpreter](https://www.cs.cornell.edu/courses/cs3410/2019sp/riscv/interpreter/) - for enabling manual verification through observing the architectural state
+- Digital Design and Computer Architecture, RISC-V Edition: Harris and Harris
